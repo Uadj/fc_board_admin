@@ -60,6 +60,10 @@ public record BoardAdminPrincipal(
         return UserAccountDto.of(
                 username,
                 password,
+                authorities.stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .map(RoleType::valueOf)
+                        .collect(Collectors.toUnmodifiableSet()),
                 email,
                 nickname,
                 memo

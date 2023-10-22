@@ -1,9 +1,14 @@
 package com.example.fc_board_admin.domain;
 
+import com.example.fc_board_admin.converter.RoleTypesConverter;
+import com.example.fc_board_admin.domain.constant.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @ToString(callSuper = true)
@@ -26,6 +31,10 @@ public class UserAccount extends AuditingFields {
     @Setter
     @Column(nullable = false)
     private String userPassword;
+
+    @Convert(converter = RoleTypesConverter.class)
+    @Column(nullable = false)
+    private Set<RoleType> roleTypes = new LinkedHashSet<>();
 
     @Setter
     @Column(length = 100, unique = true)
@@ -57,6 +66,12 @@ public class UserAccount extends AuditingFields {
         return new UserAccount(userId, userPassword, email, nickname, memo, createdBy);
     }
 
+    public void addRoleType(RoleType roleType){
+        this.getRoleTypes().add(roleType);
+    }
+    public void addRoleTypes(Collection<RoleType> roleTypes){
+        this.getRoleTypes().addAll(roleTypes);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
